@@ -10,11 +10,20 @@ You need:
 * CFW on your 3DS
 
 Once you have all that:
-* Dump a code.bin from SmileBASIC
-* Submit it to patcher.php  
+* Dump a code.bin from SmileBASIC  
+Here's one way to do this:
+  * Make sure you have the latest release of GodMode9
+  * Open GodMode9 and navigate to A:/title/00040000/0016de00/content
+  * Press A while highlighting 00000000.tmd and select "TMD file options..." -> "Build CIA (standard)"
+  * Go to 0:/gm9out/
+  * Press A while highlighting 000400000016de00.cia and select "CIA image options..." -> "Mount image to drive"
+  * Navigate inside the first folder shown, then inside the exefs folder
+  * Press A while highlighting .code and select "Copy to 0:/gm9out"
+  * You now have the code.bin of SmileBASIC in /gm9out/.code on your SD card
+* Submit your code.bin to patcher.php  
 It should patch the binary to use whatever url you put the server in
 * Load the code.bin over SmileBASIC's  
-If you use Luma3DS, put your modified binary into /luma/titles/000400000016DE00.bin and make sure "Enable game patching" is checked
+If you use Luma3DS, put your modified code.bin into /luma/titles/000400000016DE00/code.bin and make sure "Enable game patching" is checked in Luma's settings
 * You should then be able to just use the interface as usual
 
 # Information
