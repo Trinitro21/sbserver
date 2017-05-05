@@ -5,6 +5,7 @@ This is a clone of SmileBOOM's SmileBASIC servers. With this, no NNID is needed,
 You need:
 * Somewhere to host it
 * PHP installed
+* The PHP GD extension
 * PHP should have access to the folder you're putting it in
 * A url that isn't too long as there's only around 40 chars available for urls in the binaries
 * CFW on your 3DS
@@ -20,7 +21,7 @@ Here's one way to do this:
   * Navigate inside the first folder shown, then inside the exefs folder
   * Press A while highlighting .code and select "Copy to 0:/gm9out"
   * You now have the code.bin of SmileBASIC in /gm9out/.code on your SD card
-* Submit your code.bin to patcher.php  
+* Submit your code.bin to the patcher in index.php  
 It should patch the binary to use whatever url you put the server in
 * Load the code.bin over SmileBASIC's  
 If you use Luma3DS, put your modified code.bin into /luma/titles/000400000016DE00/code.bin and make sure "Enable game patching" is checked in Luma's settings
