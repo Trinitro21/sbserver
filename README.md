@@ -11,7 +11,7 @@ You need:
 * CFW on your 3DS
 
 Once you have all that:
-* Dump a code.bin from SmileBASIC  
+* Dump a decompressed code.bin from SmileBASIC  
 Here's one way to do this:
   * Make sure you have the latest release of GodMode9
   * Open GodMode9 and navigate to A:/title/00040000/0016de00/content
@@ -20,6 +20,9 @@ Here's one way to do this:
   * Press A while highlighting 000400000016de00.cia and select "CIA image options..." -> "Mount image to drive"
   * Navigate inside the first folder shown, then inside the exefs folder
   * Press A while highlighting .code and select "Copy to 0:/gm9out"
+  * Download and extract https://github.com/dnasdw/3dstool/releases/latest on a PC
+  * Insert your 3DS's SD card into your PC, navigate to /gm9out, and copy the 3dstool program into that directory
+  * Open up a command prompt in that directory and run `3dstool --decompresscode -uvf .code --compress-type blz` to decompress the file
   * You now have the code.bin of SmileBASIC in /gm9out/.code on your SD card
 * Submit your code.bin to the patcher in index.php  
 It should patch the binary to use whatever url you put the server in
