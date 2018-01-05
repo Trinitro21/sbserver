@@ -10,6 +10,10 @@ X-PETC-C: key
 include "functions.php";
 init(true);
 
+if(!isset($h["X-PETC-C"])){
+	die();
+}
+
 $key=$h["X-PETC-C"];
 
 fromkey(false);

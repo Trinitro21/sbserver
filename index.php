@@ -1,9 +1,33 @@
 <?php include "functions.php";
+if(isset($_POST["ips"])){
+	$urlbase="://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+	$urlbase=substr($urlbase,0,strrpos($urlbase,"/")+1);
+	//strlen($urlbase)+11 shouldn't be more than 36 chars
+	$f="PATCH";
+	$patches=array(
+		hex2bin("05685c")=>"save3.php",
+		hex2bin("0574d4")=>"load2.php",
+		hex2bin("05826c")=>"save3.php",
+		hex2bin("0587e4")=>"show2.php",
+		hex2bin("058cf8")=>"load2.php",
+		hex2bin("05a184")=>"list2.php",
+		hex2bin("05a2b8")=>"delete2.php",
+		hex2bin("05a424")=>"info2.php"
+	);
+	foreach($patches as $addr=>$val){
+		$f.=$addr.hex2bin("0024").$urlbase.$val.str_repeat("\000",36-strlen($urlbase.$val));
+	}
+	$f.="EOF";
+	header("Content-Disposition: attachment; filename=\"code.ips\"");
+	die($f);//exit
+}
 if(!empty($_FILES["codebin"])){//patch code.bin
 	$urlbase="http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 	$urlbase=substr($urlbase,0,strrpos($urlbase,"/")+1);
 	$diff=strlen($urlbase)-strlen("https://save.smilebasic.com/");
-	
+	if($_FILES['codebin']['error']==UPLOAD_ERR_INI_SIZE || $_FILES['codebin']['error']==UPLOAD_ERR_FORM_SIZE){
+		die("Sorry, the file was too large to process");
+	}
 	$f=file_get_contents($_FILES["codebin"]["tmp_name"]);
 	$files=scandir(".");
 	foreach($files as $filename){
@@ -44,6 +68,11 @@ if(strlen($path)==0){//not requesting info on any files, show main page ?>
 		<h2>Patcher:</h2>
 		<form method="POST" action="" enctype="multipart/form-data">
 			<input type="file" name="codebin">
+			<input type="submit">
+		</form>
+		<h2>IPS Generator for SmileBASIC 3.5.2</h2>
+		<form method="POST" action="">
+			<input type="text" name="ips" style="display:none;">
 			<input type="submit">
 		</form>
 	</body>

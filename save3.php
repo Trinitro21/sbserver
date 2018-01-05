@@ -13,6 +13,13 @@ file contents in body of request as chunked data
 include "functions.php";
 init(false);
 
+if(!isset($h["X-PETC-B"])){
+	die();
+}
+if(!isset($h["X-PETC-D"])){
+	die();
+}
+
 $filename=$h["X-PETC-B"];
 $size=$h["X-PETC-D"];
 

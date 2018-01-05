@@ -10,6 +10,10 @@ X-PETC-C: unk, 1 works
 include "functions.php";
 init(false);
 
+if(!isset($h["X-PETC-B"])){
+	die();
+}
+
 $key=$h["X-PETC-B"];
 
 $c=getkeydata($key);

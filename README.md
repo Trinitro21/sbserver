@@ -10,25 +10,22 @@ You need:
 * A url that isn't too long as there's only around 40 chars available for urls in the binaries
 * CFW on your 3DS
 
-Once you have all that:
-* Dump a decompressed code.bin from SmileBASIC  
+Once you have all that there are two ways to install the necessary modifications on your 3DS:
+* If you have version 3.5.2 of SmileBASIC, you can use the .ips generator in index.php to download a code.ips file
+  * If you use Luma3DS, you can place this file into /luma/titles/000400000016DE00/code.ips
+* Modify the code.bin of SmileBASIC
+  * Dump a decompressed code.bin from SmileBASIC  
 Here's one way to do this:
-  * Make sure you have the latest release of GodMode9
-  * Open GodMode9 and navigate to A:/title/00040000/0016de00/content
-  * Press A while highlighting 00000000.tmd and select "TMD file options..." -> "Build CIA (standard)"
-  * Go to 0:/gm9out/
-  * Press A while highlighting 000400000016de00.cia and select "CIA image options..." -> "Mount image to drive"
-  * Navigate inside the first folder shown, then inside the exefs folder
-  * Press A while highlighting .code and select "Copy to 0:/gm9out"
-  * Download and extract https://github.com/dnasdw/3dstool/releases/latest on a PC
-  * Insert your 3DS's SD card into your PC, navigate to /gm9out, and copy the 3dstool program into that directory
-  * Open up a command prompt in that directory and run `3dstool --decompresscode -uvf .code --compress-type blz` to decompress the file
-  * You now have the code.bin of SmileBASIC in /gm9out/.code on your SD card
-* Submit your code.bin to the patcher in index.php  
+    * Make sure you have the latest release of GodMode9
+    * Open GodMode9 and navigate to A:/title/0004000e/0016de00/content
+    * Press A while highlighting 00000000.tmd and select "TMD file options..." -> "Extract .code"
+    * You now have the code.bin of SmileBASIC in /gm9out/.code on your SD card
+  * Submit your code.bin to the patcher in index.php  
 It should patch the binary to use whatever url you put the server in
-* Load the code.bin over SmileBASIC's  
+  * Load the code.bin over SmileBASIC's  
 If you use Luma3DS, put your modified code.bin into /luma/titles/000400000016DE00/code.bin and make sure "Enable game patching" is checked in Luma's settings
-* You should then be able to just use the interface as usual
+
+After you have done this, you should then be able to just use the interface as usual
 
 # Information
 * The server determines what account you're using from the token your 3DS sends  

@@ -1,6 +1,7 @@
 <?php
 
 function id($value){
+	//file_put_contents("tokens.txt",$value."\n",FILE_APPEND);
 	$value=preg_replace("/\*/","=",$value);
 	$value=preg_replace("/\./","/",$value);
 	$value=preg_replace("/\-/","+",$value);
@@ -15,8 +16,14 @@ function init($dontdieifnoid){
 	$h=getallheaders();
 	if(isset($h["X-PETC-A"])){
 		$id=id($h["X-PETC-A"]);
-	}else{
+	}else if(isset($h["X-PETC-B"])){
 		$id=id($h["X-PETC-B"]);
+	}else{
+		if(!$dontdieifnoid){
+			die("Error");
+		}else{
+			$id="";
+		}
 	}
 	
 	if(strlen($id)<64 && !$dontdieifnoid){
