@@ -159,10 +159,14 @@ function formats($f,$filename){
 	}
 	if(isset($_GET["png"]) && !is_null($_GET["png"])){//png -> verify grp, parse image
 		if(s($f,2,2)!=1){bad();}//check dat
-		if(st($f,80,8)!="PCBN0001"){bad();}//check dat magic
-		if(s($f,88,2)!=3){bad();}//check dat color
-		if(s($f,90,2)!=2){bad();}//check 2d
-		$dim=array(s($f,92,4),s($f,96,4));//get dimensions
+		$fd=substr($f,80,strlen($f)-100);
+		if(s($f,19,1)==4){
+			$fd=zlib_decode($fd);
+		}
+		if(st($fd,80-80,8)!="PCBN0001"){bad();}//check dat magic
+		if(s($fd,88-80,2)!=3){bad();}//check dat color
+		if(s($fd,90-80,2)!=2){bad();}//check 2d
+		$dim=array(s($fd,92-80,4),s($fd,96-80,4));//get dimensions
 		$im=imagecreatetruecolor($dim[1],$dim[0]);//make it
 		imagealphablending($im,false);
 		imagesavealpha($im,true);//yes there can be transparency
@@ -171,7 +175,7 @@ function formats($f,$filename){
 		for($x=0;$x<$dim[1];$x++){
 			for($y=0;$y<$dim[0];$y++){
 				$index=108+($x+$y*$dim[0])*2;//offset in file
-				$col=s($f,$index,2);//get color data
+				$col=s($fd,$index-80,2);//get color data
 				if(($col & 1)==0){continue;}//skip transparent pixels, the image is pre-filled with transparency
 				$b=($col & 0b0000000000111110)/0b10*256/32;
 				$g=($col & 0b0000011111000000)/0b1000000*256/32;
@@ -217,6 +221,7 @@ if($t==0){//this feels wrong
 }else{
 	$type="UNK";
 }
+$compressed=s($f,19,1);
 ?>
 		<table>
 			<tbody>
@@ -224,7 +229,14 @@ if($t==0){//this feels wrong
 				<tr><td>Formats:</td><td>
 					<a href="<?php echo $path; ?>?raw">Raw</a>
 					<?php if($type=="TXT"){echo '<a href="'.$path.'?txt">Text</a>';} ?>
-					<?php if($type=="DAT" && s($f,88,2)==3){echo '<a href="'.$path.'?png">PNG</a>';} ?>
+					<?php 
+if($type=="DAT"){
+	$fd=substr($f,80,strlen($f)-100);
+	if($compressed==4){
+		$fd=zlib_decode($fd);
+	}
+	if(s($fd,88-80,2)==3){echo '<a href="'.$path.'?png">PNG</a>';}
+} ?>
 				</td></tr>
 				<tr>
 					<td>Type:</td>
@@ -237,6 +249,10 @@ if($t==0){//this feels wrong
 				<tr>
 					<td>Size:</td>
 					<td><?php echo s($f,8,4); ?></td>
+				</tr>
+				<tr>
+					<td>Compressed:</td>
+					<td><?php if($compressed==4){echo "Yes";}else{echo "No";}?></td>
 				</tr>
 <?php if($type=="PRJ"){ ?>
 				<tr>
@@ -251,7 +267,7 @@ foreach($files as $file){
 				</tr>
 <?php }
 if($type=="DAT"){
-$t=s($f,88,2);
+$t=s($fd,88-80,2);
 if($t==3){
 	$dattype="COL";
 }elseif($t==4){
@@ -261,11 +277,12 @@ if($t==3){
 }else{
 	$dattype="UNK";
 }
-$dim=s($f,90,2);
+$dim=s($fd,90-80,2);
+if($dim>4){$dim=4;}
 $dims=array();
 $dimstring="";
 for($i=0;$i<$dim;$i++){
-	$dims[$i]=s($f,92+$i*4,4);
+	$dims[$i]=s($fd,92+$i*4-80,4);
 	$dimstring.=($i==0?"":"x").$dims[$i];
 }
 ?>
