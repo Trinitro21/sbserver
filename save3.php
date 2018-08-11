@@ -25,7 +25,7 @@ $size=$h["X-PETC-D"];
 
 //generate a key
 do{
-	$key="";
+	$key="0";
 	$lower=[48,65];
 	$upper=[57,90];
 	$len=rand(3,8);

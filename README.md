@@ -1,5 +1,6 @@
 # What is this?
 This is a clone of SmileBOOM's SmileBASIC servers. With this, no NNID is needed, everything is published automatically, there are no upload limits, and uploaded files are accessible from the web.
+It also makes requests to SmileBASIC's original servers so you can still download keys from there.
 
 # How to use this
 You need:
@@ -11,7 +12,7 @@ You need:
 * CFW on your 3DS
 
 Once you have all that there are two ways to install the necessary modifications on your 3DS:
-* If you have version 3.5.2 of SmileBASIC, you can use the .ips generator in index.php to download a code.ips file
+* If you have version 3.6.0 of SmileBASIC, you can use the .ips generator in index.php to download a code.ips file
   * If you use Luma3DS, you can place this file into /luma/titles/000400000016DE00/code.ips
 * Modify the code.bin of SmileBASIC
   * Dump a decompressed code.bin from SmileBASIC  
@@ -30,6 +31,6 @@ After you have done this, you should then be able to just use the interface as u
 # Information
 * The server determines what account you're using from the token your 3DS sends  
 All but the last 32 characters are constant per machine
-* Keys are between 3 and 8 characters long and contain uppercase letters and numbers  
+* Keys are between 4 and 9 characters long, always start with 0, and contain uppercase letters and numbers  
 If you want to change that see the do{}while() loop in save3.php
 * The server sends the "X-Petc-Rights: 1" header, which tells SmileBASIC that you bought gold membership

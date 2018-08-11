@@ -5,14 +5,22 @@ if(isset($_POST["ips"])){
 	//strlen($urlbase)+11 shouldn't be more than 36 chars
 	$f="PATCH";
 	$patches=array(
-		hex2bin("05685c")=>"save3.php",
-		hex2bin("0574d4")=>"load2.php",
-		hex2bin("05826c")=>"save3.php",
-		hex2bin("0587e4")=>"show2.php",
-		hex2bin("058cf8")=>"load2.php",
-		hex2bin("05a184")=>"list2.php",
-		hex2bin("05a2b8")=>"delete2.php",
-		hex2bin("05a424")=>"info2.php"
+		hex2bin("056954")=>"save3.php",
+		//hex2bin("05685c")=>"save3.php",
+		hex2bin("0575c4")=>"load2.php",
+		//hex2bin("0574d4")=>"load2.php",
+		hex2bin("058360")=>"save3.php",
+		//hex2bin("05826c")=>"save3.php",
+		hex2bin("0588dc")=>"show2.php",
+		//hex2bin("0587e4")=>"show2.php",
+		hex2bin("058e10")=>"load2.php",
+		//hex2bin("058cf8")=>"load2.php",
+		hex2bin("05a25c")=>"list2.php",
+		//hex2bin("05a184")=>"list2.php",
+		hex2bin("05a38c")=>"delete2.php",
+		//hex2bin("05a2b8")=>"delete2.php",
+		hex2bin("05a4f8")=>"info2.php"
+		//hex2bin("05a424")=>"info2.php"
 	);
 	foreach($patches as $addr=>$val){
 		$f.=$addr.hex2bin("0024").$urlbase.$val.str_repeat("\000",36-strlen($urlbase.$val));
@@ -70,7 +78,7 @@ if(strlen($path)==0){//not requesting info on any files, show main page ?>
 			<input type="file" name="codebin">
 			<input type="submit">
 		</form>
-		<h2>IPS Generator for SmileBASIC 3.5.2</h2>
+		<h2>IPS Generator for SmileBASIC 3.6.0</h2>
 		<form method="POST" action="">
 			<input type="text" name="ips" style="display:none;">
 			<input type="submit">

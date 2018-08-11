@@ -16,4 +16,4 @@ if(!isset($h["X-PETC-C"])){
 
 $key=$h["X-PETC-C"];
 
-fromkey(true);
+fromkey(true,4,true,"load2");

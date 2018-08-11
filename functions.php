@@ -1,7 +1,7 @@
 <?php
 
 function id($value){
-	//file_put_contents("tokens.txt",$value."\n",FILE_APPEND);
+	$orig=$value;
 	$value=preg_replace("/\*/","=",$value);
 	$value=preg_replace("/\./","/",$value);
 	$value=preg_replace("/\-/","+",$value);
@@ -12,26 +12,29 @@ function id($value){
 }
 
 function init($dontdieifnoid){
-	global $h,$id;
+	global $h,$id,$origid,$origtype;
 	$h=getallheaders();
 	if(isset($h["X-PETC-A"])){
-		$id=id($h["X-PETC-A"]);
+		$origid=$h["X-PETC-A"];
+		$origtype="A";
 	}else if(isset($h["X-PETC-B"])){
-		$id=id($h["X-PETC-B"]);
+		$origid=$h["X-PETC-B"];
+		$origtype="B";
 	}else{
 		if(!$dontdieifnoid){
 			die("Error");
 		}else{
-			$id="";
+			$origid="";
 		}
 	}
 	
+	$id=id($origid);
 	if(strlen($id)<64 && !$dontdieifnoid){
 		die("Error");
 	}
 }
 
-function fromkey($load){
+function fromkey($load,$err,$fromsb,$urlloc){
 	global $key,$filename;
 	$c=getkeydata($key);
 	if($c!=false){
@@ -46,11 +49,34 @@ function fromkey($load){
 		if($load){
 			header("Content-Disposition: attachment; filename=\"".$c["Filename"]."\"");
 			echo(file_get_contents("$key/raw"));
+		}else{
+			echo("OK");
 		}
 	}else{
-		header("X-Petc-ErrorCode: 4");
-		http_response_code(400);
-		die("Error");
+		if(!$fromsb){
+			header("X-Petc-ErrorCode: ".$err);
+			http_response_code(400);
+			die("Error");
+		}else{
+			global $response_headers,$origtype,$origid;
+			$sb=geturl("https://load.smilebasic.com/".$urlloc.".php","X-PETC-".$origtype.": ".$origid."\r\nX-PETC-C: ".$key."\r\n");
+			if($response_headers["http_code"]!=200){
+				header("X-Petc-ErrorCode: ".$err);
+				http_response_code(400);
+				die("Error");
+			}else{
+				foreach($response_headers as $name=>$val){
+					if($name!="http_code" && !is_numeric($name)){
+						header($name.": ".$val);
+					}
+				}
+				if($load){
+					echo($sb);
+				}else{
+					echo("OK");
+				}
+			}
+		}
 	}
 }
 
@@ -81,4 +107,32 @@ function getallkeys(){
 		}
 	}
 	return $out;
+}
+
+function geturl($url,$headers){
+	$context=stream_context_create(array(
+		"ssl"=>array(
+			"verify_peer"=>false,
+			"verify_peer_name"=>false,
+		),
+		"http"=>array(
+			'method'=>"GET",
+			'header'=>$headers
+		)
+	));
+	$res=file_get_contents($url,false,$context);
+	global $response_headers;
+	$response_headers=array();
+	for($s=0;$s<count($http_response_header);$s=$s+1){
+		$t=explode(": ",$http_response_header[$s],2);
+		if(preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#",$t[0],$out)){
+			$response_headers["http_code"]=intval($out[1]);
+		}
+		if(isset($t[1])){
+			$response_headers[$t[0]]=$t[1];
+		}else{
+			$response_headers[]=$t[0];
+		}
+	}
+	return $res;
 }
