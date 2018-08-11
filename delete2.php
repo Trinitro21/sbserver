@@ -37,8 +37,18 @@ if($c!=false || $c["ID"]==$id){
 	header("X-Petc-RefCount: 0");
 	echo("OK");
 }else{
-	header("X-Petc-ErrorCode: 2");
-	http_response_code(400);
-	die("Error");
+	$sb=geturl("https://save.smilebasic.com/delete2.php","X-PETC-A: ".$origid."\r\nX-PETC-B: ".$key."\r\nX-PETC-C: ".$h["X-PETC-C"]."\r\n");
+	if($response_headers["http_code"]!=200){
+		header("X-Petc-ErrorCode: 2");
+		http_response_code(400);
+		die("Error");
+	}else{
+		foreach($response_headers as $name=>$val){
+			if($name!="http_code" && !is_numeric($name)){
+				header($name.": ".$val);
+			}
+		}
+		echo("OK");
+	}
 }
 
