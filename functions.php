@@ -3,8 +3,8 @@
 function id($value){
 	$orig=$value;
 	$value=preg_replace("/\*/","=",$value);
-	$value=preg_replace("/\./","/",$value);
-	$value=preg_replace("/\-/","+",$value);
+	$value=preg_replace("/\-/","/",$value);
+	$value=preg_replace("/\./","+",$value);
 	$value=base64_decode($value);
 	$value=bin2hex($value);
 	$value=substr($value,0,strlen($value)-64);
