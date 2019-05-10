@@ -168,7 +168,7 @@ function formats($f,$filename){
 	if(isset($_GET["png"]) && !is_null($_GET["png"])){//png -> verify grp, parse image
 		if(s($f,2,2)!=1){bad();}//check dat
 		$fd=substr($f,80,strlen($f)-100);
-		if(s($f,19,1)==4){
+		if(s($f,4,1)!=0){
 			$fd=zlib_decode($fd);
 		}
 		if(st($fd,80-80,8)!="PCBN0001"){bad();}//check dat magic
@@ -229,7 +229,7 @@ if($t==0){//this feels wrong
 }else{
 	$type="UNK";
 }
-$compressed=s($f,19,1);
+$compressed=s($f,4,1);
 ?>
 		<table>
 			<tbody>
@@ -240,7 +240,7 @@ $compressed=s($f,19,1);
 					<?php 
 if($type=="DAT"){
 	$fd=substr($f,80,strlen($f)-100);
-	if($compressed==4){
+	if($compressed!=0){
 		$fd=zlib_decode($fd);
 	}
 	if(s($fd,88-80,2)==3){echo '<a href="'.$path.'?png">PNG</a>';}
@@ -260,7 +260,7 @@ if($type=="DAT"){
 				</tr>
 				<tr>
 					<td>Compressed:</td>
-					<td><?php if($compressed==4){echo "Yes";}else{echo "No";}?></td>
+					<td><?php if($compressed!=0){echo "Yes";}else{echo "No";}?></td>
 				</tr>
 <?php if($type=="PRJ"){ ?>
 				<tr>
